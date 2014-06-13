@@ -1,0 +1,2 @@
+bash-verbosity-handling
+=======================
