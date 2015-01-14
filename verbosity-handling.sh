@@ -9,23 +9,23 @@ verbosity=2 #Start counting at 2 so that any increase to this will result in a m
 maxverbosity=5 #The highest verbosity we use / allow to be displayed.  Feel free to adjust.
 
 while getopts ":v" opt; do
-	case $opt in
-		v) (( verbosity=verbosity+1 ))
-		;;
-	esac
+  case $opt in
+    v) (( verbosity=verbosity+1 ))
+    ;;
+  esac
 done
 printf "%s %d\n" "Verbosity level set to:" "$verbosity"
 
 for v in $(seq 3 $verbosity) #Start counting from 3 since 1 and 2 are standards (stdout/stderr).
 do
-	(( "$v" <= "$maxverbosity" )) && echo This would display $v 
-	(( "$v" <= "$maxverbosity" )) && eval exec "$v>&2"  #Don't change anything higher than the maximum verbosity allowed.
+  (( "$v" <= "$maxverbosity" )) && echo This would display $v 
+  (( "$v" <= "$maxverbosity" )) && eval exec "$v>&2"  #Don't change anything higher than the maximum verbosity allowed.
 done
 
 for v in $(seq $(( verbosity+1 )) $maxverbosity ) #From the verbosity level one higher than requested, through the maximum;
 do
-	(( "$v" > "2" )) && echo This would not display $v 
-	(( "$v" > "2" )) && eval exec "$v>/dev/null" #Redirect these to bitbucket, provided that they don't match stdout and stderr.
+  (( "$v" > "2" )) && echo This would not display $v 
+  (( "$v" > "2" )) && eval exec "$v>/dev/null" #Redirect these to bitbucket, provided that they don't match stdout and stderr.
 done
 
 # Some confirmations:
