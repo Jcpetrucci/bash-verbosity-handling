@@ -25,3 +25,13 @@ This message is seen at verbosity level 3 and above.
 This message is seen at verbosity level 4 and above.
 sh-4.2$
 ```
+
+You could also use a command substitution inside of the descriptor redirection, to prepend a string to the debug output, such as this:
+
+`(( "$v" <= "$maxverbosity" )) && eval exec "$v> >( xargs -I{} printf '[Debug.%s] %s\n' "\$v" "{}" >&2 )"` 
+
+or
+
+`(( "$v" <= "$maxverbosity" )) && eval exec "$v> >( sed 's/^/[Debug.$v] /' >&2 )"`
+
+The downside to these is that the external commands are slower to run than a builtin, and can result in the output getting out of order.
